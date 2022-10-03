@@ -10,7 +10,7 @@ UPLOAD_FOLDER = os.path.join(path, 'uploads')
 
 # Receive xml file 
 @rec.route("/rec_xml_file", methods = ['POST', 'GET'])
-def rec_files():
+def upload_files():
     if request.method == 'POST':
         if 'file-input' not in request.files:
             flash('No file part')
