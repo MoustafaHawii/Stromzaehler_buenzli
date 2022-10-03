@@ -17,7 +17,12 @@
 		<link rel="stylesheet" href="../static/style.css" />
 	</head>
 	<body>
-		<form action="/rec_xml_file" method="POST" style="display: none">
+		<form
+			action="/rec_xml_file"
+			method="POST"
+			style="display: none"
+			enctype="multipart/form-data"
+		>
 			<input
 				type="file"
 				name="file-input"
@@ -25,7 +30,7 @@
 				multiple
 				accept="text/xml"
 			/>
-			<button type="submit" id="submit-btn">Submit</button>
+			<input type="submit" id="submit-btn" />
 		</form>
 		<figure class="highcharts-figure">
 			<div id="container"></div>
