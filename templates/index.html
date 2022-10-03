@@ -17,6 +17,8 @@
 		<link rel="stylesheet" href="../static/style.css" />
 	</head>
 	<body>
+		{% with messages = get_flashed_messages() %}
+		{% endwith %}
 		<form
 			action="/rec_xml_file"
 			method="POST"
