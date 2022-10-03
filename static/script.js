@@ -19,11 +19,45 @@ const data = getData(n);
 const data2 = getData(n, 200);
 console.time("line");
 const chart = Highcharts.stockChart("container", {
-	rangeSelector: {
-		selected: 1,
+	chart: {
+		zoomType: "x",
 	},
 	title: {
 		text: "Stromzähler",
+	},
+	rangeSelector: {
+		buttons: [
+			{
+				type: "day",
+				count: 1,
+				text: "1d",
+			},
+			{
+				type: "week",
+				count: 1,
+				text: "1w",
+			},
+			{
+				type: "month",
+				count: 1,
+				text: "1m",
+			},
+			{
+				type: "month",
+				count: 6,
+				text: "6m",
+			},
+			{
+				type: "year",
+				count: 1,
+				text: "1y",
+			},
+			{
+				type: "all",
+				text: "All",
+			},
+		],
+		selected: 2,
 	},
 	series: [
 		{
@@ -35,5 +69,34 @@ const chart = Highcharts.stockChart("container", {
 			data: data2,
 		},
 	],
+	exporting: {
+		buttons: [
+			{
+				text: "Next Day",
+				onclick: () => {
+					const addDay = (ts) => {
+						const date = new Date(ts);
+						date.setDate(date.getDate() + 1);
+						return date.getTime();
+					};
+					const { min, max } = chart.xAxis[0].getExtremes();
+					chart.xAxis[0].setExtremes(addDay(min), addDay(max));
+				},
+				theme: {
+					"stroke-width": 1,
+					stroke: "silver",
+					states: {
+						hover: {
+							fill: "#a4edba",
+						},
+						select: {
+							stroke: "#039",
+							fill: "#a4edba",
+						},
+					},
+				},
+			},
+		],
+	},
 });
 console.timeEnd("line");
