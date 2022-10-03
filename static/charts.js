@@ -26,6 +26,7 @@ const chart = Highcharts.stockChart("container", {
 		text: "Stromzähler",
 	},
 	rangeSelector: {
+		floating: true,
 		buttons: [
 			{
 				type: "day",
@@ -69,37 +70,40 @@ const chart = Highcharts.stockChart("container", {
 			data: data2,
 		},
 	],
+	// exporting: {
+	// 	buttons: [
+	// 		{
+	// 			text: "month >",
+	// 			onclick: () => {
+	// 				translateChart((date) =>
+	// 					date.setMonth(date.getMonth() + 1)
+	// 				);
+	// 			},
+	// 		},
+	// 		{
+	// 			text: "day >",
+	// 			onclick: () => {
+	// 				translateChart((date) => date.setDate(date.getDate() + 1));
+	// 			},
+	// 		},
+	// 		{
+	// 			text: "< day",
+	// 			onclick: () => {
+	// 				translateChart((date) => date.setDate(date.getDate() - 1));
+	// 			},
+	// 		},
+	// 		{
+	// 			text: "< month",
+	// 			onclick: () => {
+	// 				translateChart((date) =>
+	// 					date.setMonth(date.getMonth() - 1)
+	// 				);
+	// 			},
+	// 		},
+	// 	],
+	// },
 	exporting: {
-		buttons: [
-			{
-				text: "month >",
-				onclick: () => {
-					translateChart((date) =>
-						date.setMonth(date.getMonth() + 1)
-					);
-				},
-			},
-			{
-				text: "day >",
-				onclick: () => {
-					translateChart((date) => date.setDate(date.getDate() + 1));
-				},
-			},
-			{
-				text: "< day",
-				onclick: () => {
-					translateChart((date) => date.setDate(date.getDate() - 1));
-				},
-			},
-			{
-				text: "< month",
-				onclick: () => {
-					translateChart((date) =>
-						date.setMonth(date.getMonth() - 1)
-					);
-				},
-			},
-		],
+		enabled: true,
 	},
 	navigation: {
 		buttonOptions: {

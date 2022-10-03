@@ -26,16 +26,19 @@
 				</select>
 				<button id="download-btn">Download</button>
 			</div>
-			<div class="import">
-				<label for="import">Upload</label>
-				<input
-					type="file"
-					name="file-input"
-					id="file-input"
-					multiple
-					accept="text/xml"
-				/>
-			</div>
+			<form action="/upload" method="POST">
+				<div class="import">
+					<label for="import">Upload</label>
+					<input
+						type="file"
+						name="file-input"
+						id="file-input"
+						multiple
+						accept="text/xml"
+					/>
+				</div>
+				<button type="submit">Submit</button>
+			</form>
 		</div>
 		<figure class="highcharts-figure">
 			<div id="container"></div>
