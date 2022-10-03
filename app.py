@@ -3,6 +3,7 @@ from rec import rec
 from send import send
 
 app = Flask(__name__)
+app.secret_key="apple"
 app.register_blueprint(rec)
 app.register_blueprint(send)
 
