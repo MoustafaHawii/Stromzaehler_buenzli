@@ -72,31 +72,43 @@ const chart = Highcharts.stockChart("container", {
 	exporting: {
 		buttons: [
 			{
-				text: "Next Day",
+				text: "month >",
 				onclick: () => {
-					const addDay = (ts) => {
-						const date = new Date(ts);
-						date.setDate(date.getDate() + 1);
-						return date.getTime();
-					};
-					const { min, max } = chart.xAxis[0].getExtremes();
-					chart.xAxis[0].setExtremes(addDay(min), addDay(max));
+					translateChart((date) =>
+						date.setMonth(date.getMonth() + 1)
+					);
 				},
-				theme: {
-					"stroke-width": 1,
-					stroke: "silver",
-					states: {
-						hover: {
-							fill: "#a4edba",
-						},
-						select: {
-							stroke: "#039",
-							fill: "#a4edba",
-						},
-					},
+			},
+			{
+				text: "day >",
+				onclick: () => {
+					translateChart((date) => date.setDate(date.getDate() + 1));
+				},
+			},
+			{
+				text: "< day",
+				onclick: () => {
+					translateChart((date) => date.setDate(date.getDate() - 1));
+				},
+			},
+			{
+				text: "< month",
+				onclick: () => {
+					translateChart((date) =>
+						date.setMonth(date.getMonth() - 1)
+					);
 				},
 			},
 		],
 	},
 });
+
+function translateChart(changeFn) {
+	const { min, max } = chart.xAxis[0].getExtremes();
+	chart.xAxis[0].setExtremes(
+		changeFn(new Date(min)),
+		changeFn(new Date(max))
+	);
+}
+
 console.timeEnd("line");
