@@ -12,10 +12,31 @@
 			type="text/javascript"
 			src="https://www.highcharts.com/samples/data/usdeur.js"
 		></script>
+		<script src="../static/charts.js" defer></script>
 		<script src="../static/script.js" defer></script>
 		<link rel="stylesheet" href="../static/style.css" />
 	</head>
 	<body>
+		<div class="file-container">
+			<div class="export">
+				<label for="export-type">Export: </label>
+				<select name="export-type" id="export-type">
+					<option value="csv">CSV</option>
+					<option value="json">JSON</option>
+				</select>
+				<button id="download-btn">Download</button>
+			</div>
+			<div class="import">
+				<label for="import">Upload</label>
+				<input
+					type="file"
+					name="file-input"
+					id="file-input"
+					multiple
+					accept="text/xml"
+				/>
+			</div>
+		</div>
 		<figure class="highcharts-figure">
 			<div id="container"></div>
 		</figure>

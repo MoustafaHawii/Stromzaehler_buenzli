@@ -1,114 +1,58 @@
-function getData(n, amp = 100) {
-	const arr = [];
-	let a, b, c;
-	let x = Date.UTC(new Date().getUTCFullYear(), 0, 1) - n * 36e5;
-	for (let i = 0; i < n; i++, x += 36e5) {
-		if (i % 100 === 0) a = 2 * Math.random();
-		if (i % 1000 === 0) b = 2 * Math.random();
-		if (i % 10000 === 0) c = 2 * Math.random();
-		const spike = i % 50000 === 0 ? 10 : 0;
-		arr.push([
-			x,
-			2 * Math.sin(i / amp) + a + b + c + spike + Math.random(),
-		]);
-	}
-	return arr;
-}
-const n = 500000;
-const data = getData(n);
-const data2 = getData(n, 200);
-console.time("line");
-const chart = Highcharts.stockChart("container", {
-	chart: {
-		zoomType: "x",
-	},
-	title: {
-		text: "Stromzähler",
-	},
-	rangeSelector: {
-		buttons: [
-			{
-				type: "day",
-				count: 1,
-				text: "1d",
-			},
-			{
-				type: "week",
-				count: 1,
-				text: "1w",
-			},
-			{
-				type: "month",
-				count: 1,
-				text: "1m",
-			},
-			{
-				type: "month",
-				count: 6,
-				text: "6m",
-			},
-			{
-				type: "year",
-				count: 1,
-				text: "1y",
-			},
-			{
-				type: "all",
-				text: "All",
-			},
-		],
-		selected: 2,
-	},
-	series: [
-		{
-			name: "Einspeisung",
-			data: data,
-		},
-		{
-			name: "Verbrauch",
-			data: data2,
-		},
-	],
-	exporting: {
-		buttons: [
-			{
-				text: "month >",
-				onclick: () => {
-					translateChart((date) =>
-						date.setMonth(date.getMonth() + 1)
-					);
-				},
-			},
-			{
-				text: "day >",
-				onclick: () => {
-					translateChart((date) => date.setDate(date.getDate() + 1));
-				},
-			},
-			{
-				text: "< day",
-				onclick: () => {
-					translateChart((date) => date.setDate(date.getDate() - 1));
-				},
-			},
-			{
-				text: "< month",
-				onclick: () => {
-					translateChart((date) =>
-						date.setMonth(date.getMonth() - 1)
-					);
-				},
-			},
-		],
-	},
-});
-
-function translateChart(changeFn) {
-	const { min, max } = chart.xAxis[0].getExtremes();
-	chart.xAxis[0].setExtremes(
-		changeFn(new Date(min)),
-		changeFn(new Date(max))
+function download(filename, text) {
+	const element = document.createElement("a");
+	element.setAttribute(
+		"href",
+		"data:text/plain;charset=utf-8," + encodeURIComponent(text)
 	);
+	element.setAttribute("download", filename);
+
+	element.style.display = "none";
+	document.body.appendChild(element);
+
+	element.click();
+
+	document.body.removeChild(element);
 }
 
-console.timeEnd("line");
+const json = [
+	{
+		ts: 2163478,
+		feedR: 1.2,
+		feedA: 4567,
+		usgR: 0.9,
+		usgA: 5678,
+	},
+	{
+		ts: 34567888,
+		feedR: 1.4,
+		feedA: 2349,
+		usgR: 0.1,
+		usgA: 283459,
+	},
+	{
+		ts: 456789436,
+		feedR: 1.2,
+		feedA: 45235,
+		usgR: 0.9,
+		usgA: 235,
+	},
+];
+
+function jsonToCSV(json) {
+	let output =
+		"timestamp;realtive feed; absolute feed;relative usage; absolute usage";
+	for (const entry of json) {
+		const { ts, feedR, feedA, usgR, usgA } = entry;
+		output += `\n${ts};${feedR};${feedA};${usgR};${usgA}`;
+	}
+	return output;
+}
+
+document.querySelector("#download-btn").addEventListener("click", () => {
+	const type = document.querySelector("#export-type").value;
+	if (type == "json") {
+		download("data.json", JSON.stringify(json, null, 4));
+	} else {
+		download("data.csv", jsonToCSV(json));
+	}
+});
