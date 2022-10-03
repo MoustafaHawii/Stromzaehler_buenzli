@@ -84,6 +84,19 @@ const chart = Highcharts.stockChart("container", {
 						separator: true,
 					},
 					{
+						text: "Import XML",
+						onclick: function () {
+							document.querySelector("#file-input").click();
+							document
+								.querySelector("#file-input")
+								.addEventListener("change", () => {
+									document
+										.querySelector("#submit-btn")
+										.click();
+								});
+						},
+					},
+					{
 						text: "Download CSV",
 						onclick: function () {
 							download("data.csv", jsonToCSV(json));
@@ -172,33 +185,6 @@ const chart = Highcharts.stockChart("container", {
 		},
 	},
 });
-
-const huso = {
-	nextMonth: {
-		text: "month >",
-		onclick: () => {
-			translateChart((date) => date.setMonth(date.getMonth() + 1));
-		},
-	},
-	nextDay: {
-		text: "day >",
-		onclick: () => {
-			translateChart((date) => date.setDate(date.getDate() + 1));
-		},
-	},
-	prevDay: {
-		text: "< day",
-		onclick: () => {
-			translateChart((date) => date.setDate(date.getDate() - 1));
-		},
-	},
-	prevMonth: {
-		text: "< month",
-		onclick: () => {
-			translateChart((date) => date.setMonth(date.getMonth() - 1));
-		},
-	},
-};
 
 function translateChart(changeFn) {
 	const { min, max } = chart.xAxis[0].getExtremes();
