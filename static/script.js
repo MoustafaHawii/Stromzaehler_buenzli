@@ -47,12 +47,3 @@ function jsonToCSV(json) {
 	}
 	return output;
 }
-
-document.querySelector("#download-btn").addEventListener("click", () => {
-	const type = document.querySelector("#export-type").value;
-	if (type == "json") {
-		download("data.json", JSON.stringify(json, null, 4));
-	} else {
-		download("data.csv", jsonToCSV(json));
-	}
-});

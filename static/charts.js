@@ -70,40 +70,101 @@ const chart = Highcharts.stockChart("container", {
 			data: data2,
 		},
 	],
-	// exporting: {
-	// 	buttons: [
-	// 		{
-	// 			text: "month >",
-	// 			onclick: () => {
-	// 				translateChart((date) =>
-	// 					date.setMonth(date.getMonth() + 1)
-	// 				);
-	// 			},
-	// 		},
-	// 		{
-	// 			text: "day >",
-	// 			onclick: () => {
-	// 				translateChart((date) => date.setDate(date.getDate() + 1));
-	// 			},
-	// 		},
-	// 		{
-	// 			text: "< day",
-	// 			onclick: () => {
-	// 				translateChart((date) => date.setDate(date.getDate() - 1));
-	// 			},
-	// 		},
-	// 		{
-	// 			text: "< month",
-	// 			onclick: () => {
-	// 				translateChart((date) =>
-	// 					date.setMonth(date.getMonth() - 1)
-	// 				);
-	// 			},
-	// 		},
-	// 	],
-	// },
 	exporting: {
-		enabled: true,
+		buttons: {
+			contextButton: {
+				menuItems: [
+					{
+						textKey: "printChart",
+						onclick: function () {
+							this.print();
+						},
+					},
+					{
+						separator: true,
+					},
+					{
+						text: "Download CSV",
+						onclick: function () {
+							download("data.csv", jsonToCSV(json));
+						},
+					},
+					{
+						text: "Download JSON",
+						onclick: function () {
+							download(
+								"data.json",
+								JSON.stringify(json, null, 4)
+							);
+						},
+					},
+					{
+						separator: true,
+					},
+					{
+						textKey: "downloadPNG",
+						onclick: function () {
+							this.exportChart();
+						},
+					},
+					{
+						textKey: "downloadJPEG",
+						onclick: function () {
+							this.exportChart({
+								type: "image/jpeg",
+							});
+						},
+					},
+					{
+						separator: true,
+					},
+					{
+						textKey: "downloadPDF",
+						onclick: function () {
+							this.exportChart({
+								type: "application/pdf",
+							});
+						},
+					},
+					{
+						textKey: "downloadSVG",
+						onclick: function () {
+							this.exportChart({
+								type: "image/svg+xml",
+							});
+						},
+					},
+				],
+			},
+			nextMonth: {
+				text: "month >",
+				onclick: () => {
+					translateChart((date) =>
+						date.setMonth(date.getMonth() + 1)
+					);
+				},
+			},
+			nextDay: {
+				text: "day >",
+				onclick: () => {
+					translateChart((date) => date.setDate(date.getDate() + 1));
+				},
+			},
+			prevDay: {
+				text: "< day",
+				onclick: () => {
+					translateChart((date) => date.setDate(date.getDate() - 1));
+				},
+			},
+			prevMonth: {
+				text: "< month",
+				onclick: () => {
+					translateChart((date) =>
+						date.setMonth(date.getMonth() - 1)
+					);
+				},
+			},
+		},
 	},
 	navigation: {
 		buttonOptions: {
@@ -111,6 +172,33 @@ const chart = Highcharts.stockChart("container", {
 		},
 	},
 });
+
+const huso = {
+	nextMonth: {
+		text: "month >",
+		onclick: () => {
+			translateChart((date) => date.setMonth(date.getMonth() + 1));
+		},
+	},
+	nextDay: {
+		text: "day >",
+		onclick: () => {
+			translateChart((date) => date.setDate(date.getDate() + 1));
+		},
+	},
+	prevDay: {
+		text: "< day",
+		onclick: () => {
+			translateChart((date) => date.setDate(date.getDate() - 1));
+		},
+	},
+	prevMonth: {
+		text: "< month",
+		onclick: () => {
+			translateChart((date) => date.setMonth(date.getMonth() - 1));
+		},
+	},
+};
 
 function translateChart(changeFn) {
 	const { min, max } = chart.xAxis[0].getExtremes();

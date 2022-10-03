@@ -18,15 +18,7 @@
 	</head>
 	<body>
 		<div class="file-container">
-			<div class="export">
-				<label for="export-type">Export: </label>
-				<select name="export-type" id="export-type">
-					<option value="csv">CSV</option>
-					<option value="json">JSON</option>
-				</select>
-				<button id="download-btn">Download</button>
-			</div>
-			<form action="/upload" method="POST">
+			<form action="/rec_xml_file" method="POST">
 				<div class="import">
 					<label for="import">Upload</label>
 					<input
