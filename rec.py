@@ -12,3 +12,4 @@ def rec_files():
       for file in uploaded_files:
         file.save(os.path.join(rec.config("UPLOAD_FOLDER")), werkzeug.secure_filename(file.filename))
       return 'file uploaded successfully'
+    return "No file selected or false method was used"
