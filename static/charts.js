@@ -230,3 +230,21 @@ function translateChart(changeFn) {
 		changeFn(new Date(max))
 	);
 }
+
+const select = Highcharts.createElement(
+	'select', {
+		onchange: function() {
+			setView(this.selectedIndex)
+		}
+	}, {
+		position: 'absolute',
+		top: '0px',
+	}, document.querySelector('#container'));
+
+['relative Werte', 'absolute Werte'].forEach(function(element) {
+	Highcharts.createElement(
+		'option', {
+			value: element,
+			innerHTML: element
+		}, {}, select);
+});
