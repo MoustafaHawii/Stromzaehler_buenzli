@@ -1,9 +1,13 @@
 from flask import Flask, render_template
 from rec import rec
 from send import send
+import uuid
 
 app = Flask(__name__)
-app.secret_key="apple"
+SECRET_KEY = uuid.uuid4().hex
+app.secret_key = SECRET_KEY
+app.config["SECRET_KEY"] = SECRET_KEY
+
 app.register_blueprint(rec)
 app.register_blueprint(send)
 
