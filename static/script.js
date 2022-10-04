@@ -33,3 +33,38 @@ function jsonToCSV(json) {
 	}
 	return output;
 }
+
+// ---- Toasts ---------------------------------------------------------------------------
+
+function wait(ms) {
+	return new Promise((resolve) => {
+		setTimeout(resolve, ms);
+	});
+}
+
+const toasts = document.querySelector(".toasts").children;
+for (let i = 0; i < toasts.length; i++) {
+	const toast = toasts[i];
+	wait(100 * i).then(() => {
+		console.log(toast);
+		toast.animate(
+			[
+				{ transform: "translateY(-100px)", opacity: 1 },
+				{
+					transform: `translateY(${50 * (toasts.length - i - 1)}px)`,
+					opacity: 1,
+				},
+			],
+			{
+				fill: "forwards",
+				duration: 1000,
+			}
+		);
+		wait(3000 + i * 500).then(() => {
+			toast.animate([{}, { opacity: 0 }], {
+				fill: "forwards",
+				duration: 500,
+			});
+		});
+	});
+}

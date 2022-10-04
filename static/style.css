@@ -12,6 +12,7 @@ body {
 	width: 100%;
 	height: 100vh;
 	margin: 0;
+	overflow: hidden;
 }
 
 .highcharts-figure,
@@ -19,5 +20,30 @@ body {
 	width: 100%;
 	height: 100%;
 	padding: 0;
+	margin: 0;
+}
+
+.toast {
+	width: 250px;
+	margin: 20px;
+	padding: 10px;
+	position: absolute;
+	box-shadow: 0 0 5px 0px lightgray;
+	z-index: 9999;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.toast.success {
+	background-color: lightgreen;
+}
+.toast.error {
+	background-color: coral;
+}
+.toast.info {
+	background-color: #add8e6;
+}
+
+.toast p {
 	margin: 0;
 }

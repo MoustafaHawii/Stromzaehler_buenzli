@@ -17,13 +17,29 @@
 		<link rel="stylesheet" href="../static/style.css" />
 	</head>
 	<body>
-		{% with messages = get_flashed_messages() %}
-			{% if messages %}
-				{% for msg in messages %}
-					<p>{{msg}}</p>
-				{% endfor %}
-			{% endif %}
-		{% endwith %}
+		<div class="toasts">
+			{% with messages = get_flashed_messages() %} {% if messages %} {%
+			for msg in messages %}
+			<div class="toast info">
+				<p>{{msg}}</p>
+			</div>
+			{% endfor %} {% endif %} {% endwith %}
+			<div class="toast error">
+				<p>Error 1</p>
+			</div>
+			<div class="toast error">
+				<p>Error 2</p>
+			</div>
+			<div class="toast info">
+				<p>1 Lorem</p>
+			</div>
+			<div class="toast info">
+				<p>2 Lorem</p>
+			</div>
+			<div class="toast success">
+				<p>3 Lorem</p>
+			</div>
+		</div>
 		<form
 			action="/rec_xml_file"
 			method="POST"
