@@ -19,30 +19,6 @@ function download(filename, text) {
 	document.body.removeChild(element);
 }
 
-const json = [
-	{
-		ts: 2163478,
-		feedR: 1.2,
-		feedA: 4567,
-		usgR: 0.9,
-		usgA: 5678,
-	},
-	{
-		ts: 34567888,
-		feedR: 1.4,
-		feedA: 2349,
-		usgR: 0.1,
-		usgA: 283459,
-	},
-	{
-		ts: 456789436,
-		feedR: 1.2,
-		feedA: 45235,
-		usgR: 0.9,
-		usgA: 235,
-	},
-];
-
 /**
  * Converts JSON data to CSV
  * @param {Object} json

@@ -1,49 +1,26 @@
+var chartDataRaw;
 var chartData = {};
 
-/**
- * Creates random sinewave data
- * @param {number} n count
- * @param {number} amp amplitude
- * @returns
- */
-function getData(n, amp = 100) {
-	const arr = [];
-	let a, b, c;
-	let x = Date.UTC(new Date().getUTCFullYear(), 0, 1) - n * 36e5;
-	for (let i = 0; i < n; i++, x += 36e5) {
-		if (i % 100 === 0) a = 2 * Math.random();
-		if (i % 1000 === 0) b = 2 * Math.random();
-		if (i % 10000 === 0) c = 2 * Math.random();
-		const spike = i % 50000 === 0 ? 10 : 0;
-		arr.push([
-			x,
-			2 * Math.sin(i / amp) + a + b + c + spike + Math.random(),
-		]);
-	}
-	return arr;
-}
 // fetch data from server
 fetch("/send_json_data")
 	.then((response) => response.json())
-	.then((json) => {
-		for (const sensorData of json) {
-			const { data, sensorId } = sensorData;
-			chartData["relative"] = {};
-			chartData["absolute"] = {};
+	.then((data) => {
+		chartDataRaw = data;
+		chartData["relative"] = {};
+		chartData["absolute"] = {};
 
-			const relative = { feed: [], usg: [] };
-			const absolute = { feed: [], usg: [] };
+		const relative = { feed: [], usg: [] };
+		const absolute = { feed: [], usg: [] };
 
-			for (const entry of data) {
-				const ts = new Date(entry.ts).getTime();
-				relative["feed"].push([ts, entry.feedR]);
-				relative["usg"].push([ts, entry.usgR]);
-				absolute["feed"].push([ts, entry.feedA]);
-				absolute["usg"].push([ts, entry.usgA]);
-			}
-			chartData = { relative, absolute };
-			setView(0);
+		for (const entry of data) {
+			const ts = new Date(entry.ts).getTime();
+			relative["feed"].push([ts, entry.feedR]);
+			relative["usg"].push([ts, entry.usgR]);
+			absolute["feed"].push([ts, entry.feedA]);
+			absolute["usg"].push([ts, entry.usgA]);
 		}
+		chartData = { relative, absolute };
+		setView(0);
 	});
 
 /**
@@ -74,10 +51,6 @@ function updateSeries(...newData) {
 		chart.addSeries({ name: names.shift(), data });
 	}
 }
-
-const n = 500000;
-const data = getData(n);
-const data2 = getData(n, 200);
 
 const chart = Highcharts.stockChart("container", {
 	chart: {
@@ -151,7 +124,7 @@ const chart = Highcharts.stockChart("container", {
 					{
 						text: "Download CSV",
 						onclick: function () {
-							download("data.csv", jsonToCSV(json));
+							download("data.csv", jsonToCSV(chartDataRaw));
 						},
 					},
 					{
@@ -159,7 +132,7 @@ const chart = Highcharts.stockChart("container", {
 						onclick: function () {
 							download(
 								"data.json",
-								JSON.stringify(json, null, 4)
+								JSON.stringify(chartDataRaw, null, 4)
 							);
 						},
 					},
