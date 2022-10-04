@@ -1,3 +1,11 @@
+var chartData = {};
+
+/**
+ * Creates random sinewave data
+ * @param {number} n count
+ * @param {number} amp amplitude
+ * @returns
+ */
 function getData(n, amp = 100) {
 	const arr = [];
 	let a, b, c;
@@ -14,10 +22,63 @@ function getData(n, amp = 100) {
 	}
 	return arr;
 }
+// fetch data from server
+fetch("/send_json_data")
+	.then((response) => response.json())
+	.then((json) => {
+		for (const sensorData of json) {
+			const { data, sensorId } = sensorData;
+			chartData["relative"] = {};
+			chartData["absolute"] = {};
+
+			const relative = { feed: [], usg: [] };
+			const absolute = { feed: [], usg: [] };
+
+			for (const entry of data) {
+				const ts = new Date(entry.ts).getTime();
+				relative["feed"].push([ts, entry.feedR]);
+				relative["usg"].push([ts, entry.usgR]);
+				absolute["feed"].push([ts, entry.feedA]);
+				absolute["usg"].push([ts, entry.usgA]);
+			}
+			chartData = { relative, absolute };
+			setView(0);
+		}
+	});
+
+/**
+ * Updates the chart view
+ * @param {number} viewIndex the view index to switch to
+ * (0 - relative, 1 - absolute)
+ */
+function setView(viewIndex) {
+	if (viewIndex) {
+		const data = chartData.absolute;
+		updateSeries(data.feed, data.usg);
+	} else {
+		const data = chartData.relative;
+		updateSeries(data.feed, data.usg);
+	}
+}
+
+/**
+ * updates the chart series
+ * @param  {...any} newData new chart data
+ */
+function updateSeries(...newData) {
+	const names = chart.series.map((s) => s.name);
+	while (!!chart.series.length) {
+		chart.series[0].remove();
+	}
+	for (const data of newData) {
+		chart.addSeries({ name: names.shift(), data });
+	}
+}
+
 const n = 500000;
 const data = getData(n);
 const data2 = getData(n, 200);
-console.time("line");
+
 const chart = Highcharts.stockChart("container", {
 	chart: {
 		zoomType: "x",
@@ -60,16 +121,7 @@ const chart = Highcharts.stockChart("container", {
 		],
 		selected: 2,
 	},
-	series: [
-		{
-			name: "Einspeisung",
-			data: data,
-		},
-		{
-			name: "Verbrauch",
-			data: data2,
-		},
-	],
+	series: [{ name: "Einspeisung" }, { name: "Verbrauch" }],
 	exporting: {
 		buttons: {
 			contextButton: {
@@ -193,6 +245,11 @@ const chart = Highcharts.stockChart("container", {
 	},
 });
 
+/**
+ * Translates the chart horizontally
+ * @param {Function} changeFn
+ * function that modifies the dateobj
+ */
 function translateChart(changeFn) {
 	const { min, max } = chart.xAxis[0].getExtremes();
 	chart.xAxis[0].setExtremes(
@@ -200,5 +257,3 @@ function translateChart(changeFn) {
 		changeFn(new Date(max))
 	);
 }
-
-console.timeEnd("line");
