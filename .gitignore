@@ -8,3 +8,5 @@ venv/
 files/
 # ignore lib64
 lib64
+# ignore .DS_Store
+.DS_Store
