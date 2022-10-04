@@ -150,7 +150,7 @@ const chart = Highcharts.stockChart("container", {
 				],
 			},
 			nextMonth: {
-				text: "month >",
+				text: "month +",
 				onclick: () => {
 					translateChart((date) =>
 						date.setMonth(date.getMonth() + 1)
@@ -158,24 +158,31 @@ const chart = Highcharts.stockChart("container", {
 				},
 			},
 			nextDay: {
-				text: "day >",
+				text: "day +",
 				onclick: () => {
 					translateChart((date) => date.setDate(date.getDate() + 1));
 				},
 			},
 			prevDay: {
-				text: "< day",
+				text: "- day",
 				onclick: () => {
 					translateChart((date) => date.setDate(date.getDate() - 1));
 				},
 			},
 			prevMonth: {
-				text: "< month",
+				text: "- month",
 				onclick: () => {
 					translateChart((date) =>
 						date.setMonth(date.getMonth() - 1)
 					);
 				},
+			},
+			toggle: {
+				text: "Toggle view",
+				onclick: () => {
+					alert("toggling");
+				},
+				align: "left",
 			},
 		},
 	},
