@@ -1,7 +1,7 @@
 from flask import flash
-import os
 from werkzeug.utils import secure_filename
 import xml.dom.minidom
+from io import BytesIO
 
 # Save uploaded xml file in the correct directory
 # params: 
@@ -30,20 +30,21 @@ def save_xml(uploaded_files, UPLOAD_FOLDER) -> int:
                     if has_1_8_1 and has_1_8_2:
                         save_type = 1
                 
-                print("Check")
                 # Check if it's a valid SDAT file with every needed information
                 if dom.getElementsByTagName("rsm:DocumentID") and dom.getElementsByTagName("rsm:Position"):
                     save_type = 2
         
-            
+            # If the file is either ESL or SDAT, then save it
             if save_type == 1 or save_type == 2:
                 flash("Uploaded some files", "info")
                 dir = ""
                 if save_type == 1:
-                    dir = "/esl_files/"
+                    dir = "/ESL-files/"
                 else:
-                    dir = "/sdat_files/"
+                    dir = "/SDAT-files/"
                 
-                file.save(os.path.join(app.config[UPLOAD_FOLDER], secure_filename(file.filename)))
+                # Save file in the correct directory
+                with open(UPLOAD_FOLDER + dir + secure_filename(file.filename), "wb") as f:
+                    f.write(file.getbuffer())
 
     
