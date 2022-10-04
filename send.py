@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, flash
 
 send = Blueprint("send", __name__, static_folder="static", template_folder="templates")
 

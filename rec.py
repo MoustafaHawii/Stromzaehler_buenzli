@@ -1,15 +1,27 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, flash, redirect
 import os
-import werkzeug
+from dataHandler import save_xml
 
 rec = Blueprint("rec", __name__, static_folder="static", template_folder="templates")
+path = os.getcwd()
+
+
+UPLOAD_FOLDER = os.path.join(path, 'static/files')
 
 # Receive xml file 
 @rec.route("/rec_xml_file", methods = ['POST', 'GET'])
-def rec_files():
+def upload_files():
     if request.method == 'POST':
-      uploaded_files = request.files.getlist("file[]")
-      for file in uploaded_files:
-        file.save(os.path.join(rec.config("UPLOAD_FOLDER")), werkzeug.secure_filename(file.filename))
-      return 'file uploaded successfully'
-    return "No file selected or false method was used"
+        # Check if there are any files that were sent
+        if 'file-input' not in request.files:
+            flash("No files selected", "info")
+            return redirect("/")
+
+        # Save files into a list
+        uploaded_files = request.files.getlist("file-input")
+        
+        save_xml(uploaded_files, UPLOAD_FOLDER)
+        return redirect("/")
+    
+    flash("Please send the data via the POST method")
+    return redirect("/")

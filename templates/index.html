@@ -17,6 +17,13 @@
 		<link rel="stylesheet" href="../static/style.css" />
 	</head>
 	<body>
+		{% with messages = get_flashed_messages() %}
+			{% if messages %}
+				{% for msg in messages %}
+					<p>{{msg}}</p>
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
 		<form
 			action="/rec_xml_file"
 			method="POST"
