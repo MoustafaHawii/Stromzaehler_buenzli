@@ -2,7 +2,7 @@ var chartDataRaw;
 var chartData = {};
 
 // fetch data from server
-fetch("/send_json_data")
+fetch("/static/data.json")
 	.then((response) => response.json())
 	.then((data) => {
 		chartDataRaw = data;
@@ -16,11 +16,14 @@ fetch("/send_json_data")
 			const ts = new Date(entry.ts).getTime();
 			relative["feed"].push([ts, entry.feedR]);
 			relative["usg"].push([ts, entry.usgR]);
-			absolute["feed"].push([ts, entry.feedA]);
-			absolute["usg"].push([ts, entry.usgA]);
+			absolute["feed"].push([ts, Math.max(entry.feedA, 0)]);
+			absolute["usg"].push([ts, Math.max(entry.usgA, 0)]);
 		}
 		chartData = { relative, absolute };
 		setView(0);
+	})
+	.catch((error) => {
+		console.log(error);
 	});
 
 /**
@@ -55,6 +58,11 @@ function updateSeries(...newData) {
 const chart = Highcharts.stockChart("container", {
 	chart: {
 		zoomType: "x",
+		panKey: "shift",
+		panning: {
+			enabled: true,
+			type: "x",
+		},
 	},
 	title: {
 		text: "Stromzähler",
@@ -216,6 +224,16 @@ const chart = Highcharts.stockChart("container", {
 			align: "right",
 		},
 	},
+	legend: {
+		enabled: true,
+	},
+	tooltip: {
+		formatter: function () {
+			return this.points.reduce(function (s, point) {
+				return `${s}<br/>${point.series.name} : ${point.y} kWh`;
+			}, "<b>" + new Date(this.x).toLocaleString() + "</b>");
+		},
+	},
 });
 
 /**
@@ -232,19 +250,28 @@ function translateChart(changeFn) {
 }
 
 const select = Highcharts.createElement(
-	'select', {
-		onchange: function() {
-			setView(this.selectedIndex)
-		}
-	}, {
-		position: 'absolute',
-		top: '0px',
-	}, document.querySelector('#container'));
+	"select",
+	{
+		onchange: function () {
+			setView(this.selectedIndex);
+		},
+	},
+	{
+		position: "absolute",
+		top: "20px",
+		left: "10px",
+	},
+	document.querySelector("#container")
+);
 
-['relative Werte', 'absolute Werte'].forEach(function(element) {
+["relative Werte", "absolute Werte"].forEach(function (element) {
 	Highcharts.createElement(
-		'option', {
+		"option",
+		{
 			value: element,
-			innerHTML: element
-		}, {}, select);
+			innerHTML: element,
+		},
+		{},
+		select
+	);
 });
