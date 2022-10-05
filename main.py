@@ -2,13 +2,11 @@ import os
 import xml.dom.minidom
 import dateutil.parser as dp
 from dateutil.relativedelta import *
-from data import Data
 import json
 
 # Get element value using selector
 def get_element_value(element, selector):
     return element.getElementsByTagName(selector)[0].firstChild.nodeValue
-
 
 # Calculate the needed absolute values
 def get_searched_row_value(row_values):
@@ -26,12 +24,9 @@ def get_searched_row_value(row_values):
 
     return [sum_feedA, sum_usgA]
 
-
-def get_highest_absolute_value_from_esl_files():
-    sum_feedA = 0
-    sum_usgA = 0
-    highest_time = 0.0
-    # Path to the ESL-Files
+# Get all absolute values from esl files
+def get_absolute_values_from_esl():
+    dict = {}
     path_of_the_directory = os.getcwd() + "/static/files/ESL-Files"
     # Iterate through the files in this directory
     for filename in os.listdir(path_of_the_directory):
@@ -45,15 +40,19 @@ def get_highest_absolute_value_from_esl_files():
                     row_values = dom.getElementsByTagName("ValueRow")
                     for t in time_period:
                         # Convert ISO 8601 timestamp to UNIX timestamp
-                        if highest_time < dp.parse(t.getAttribute("end")).timestamp():
-                            values = get_searched_row_value(row_values)
-                            sum_feedA = values[0]
-                            sum_usgA = values[1]
-                            highest_time = dp.parse(t.getAttribute("end")).timestamp()
+                        timestamp = dp.parse(t.getAttribute("end")).timestamp()
+                        timestamp = int(timestamp) * 1000
+                        values = get_searched_row_value(row_values)
+                        dict[timestamp] = values
+    return dict
 
-    return [sum_usgA, sum_feedA, highest_time]
+# get first absolute value where relative value is present
+def get_first_absolute_where_relative(sdat, esl):
+    for ts in sorted(sdat.keys()):
+        if ts in esl:
+            return [ts, *esl[ts]]
 
-
+# get relative values from sdat files
 def parse_sdat(path=os.getcwd() + "/static/files/SDAT-Files"):
     dict = {}
     for file in os.listdir(path):
@@ -82,18 +81,45 @@ def parse_sdat(path=os.getcwd() + "/static/files/SDAT-Files"):
                 dict[key]["feedR"] = value
     return dict
 
+# convert dict to json format
+def dict_to_json(data, absolute_ts):
+    list = []
+    abs_index = 0
+    for index, (key, value) in enumerate(sorted(data.items())):
+        if key == absolute_ts:
+            abs_index = index
+        list.append({"ts": key, **value})
 
-def dict_to_json(data):
-    arr = []
-    for key in sorted(data.keys()):
-        value = data[key]
-        arr.append({"ts": key, **value})
-    return arr
+    return calculate_abs(list, abs_index)
 
+# calculate absolute values for dict using absolutes
+def calculate_abs(list, abs_index):
+    feed = list[abs_index]["feedA"]
+    usg = list[abs_index]["usgA"]
+    for i in range(abs_index - 1, -1, -1):
+        feed -= list[i]["feedR"]
+        usg -= list[i]["usgR"]
+        list[i]["feedA"] = round(feed, 2)
+        list[i]["usgA"] = round(usg, 2)
+
+    feed = list[abs_index - 1]["feedA"]
+    usg = list[abs_index - 1]["usgA"]
+    for i in range(abs_index + 1, len(list)):
+        feed += list[i]["feedR"]
+        usg += list[i]["usgR"]
+        list[i]["feedA"] = round(feed, 2)
+        list[i]["usgA"] = round(usg, 2)
+
+    return list
 
 if __name__ == "__main__":
-    print("Getting 1 ESL value....")
-    usgA, feedA, ts = get_highest_absolute_value_from_esl_files()
-    print("Found!")
-    data = parse_sdat()
-    print(json.dumps(dict_to_json(data), indent=4))
+    dict = parse_sdat()
+    esl_val = get_absolute_values_from_esl()
+
+    [ts, feedA, usgA] = get_first_absolute_where_relative(dict, esl_val)
+
+    dict[ts]["feedA"] = feedA
+    dict[ts]["usgA"] = usgA
+
+    jsdat = dict_to_json(dict, ts)
+    print(json.dumps(jsdat, indent=4))
