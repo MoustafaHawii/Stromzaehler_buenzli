@@ -8,6 +8,7 @@
 		<script src="https://code.highcharts.com/stock/highstock.js"></script>
 		<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
 		<script src="https://code.highcharts.com/modules/exporting.js"></script>
+		<!-- <script src="https://code.highcharts.com/themes/grid.js"></script> -->
 		<script
 			type="text/javascript"
 			src="https://www.highcharts.com/samples/data/usdeur.js"
@@ -18,27 +19,12 @@
 	</head>
 	<body>
 		<div class="toasts">
-			{% with messages = get_flashed_messages() %} {% if messages %} {%
-			for msg in messages %}
-			<div class="toast info">
+			{% with messages = get_flashed_messages(with_categories=true) %} {%
+			if messages %} {% for category, msg in messages %}
+			<div class="toast {{category}}">
 				<p>{{msg}}</p>
 			</div>
 			{% endfor %} {% endif %} {% endwith %}
-			<div class="toast error">
-				<p>Error 1</p>
-			</div>
-			<div class="toast error">
-				<p>Error 2</p>
-			</div>
-			<div class="toast info">
-				<p>1 Lorem</p>
-			</div>
-			<div class="toast info">
-				<p>2 Lorem</p>
-			</div>
-			<div class="toast success">
-				<p>3 Lorem</p>
-			</div>
 		</div>
 		<form
 			action="/rec_xml_file"

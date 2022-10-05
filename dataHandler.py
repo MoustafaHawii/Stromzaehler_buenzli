@@ -1,3 +1,4 @@
+from distutils.command.upload import upload
 from flask import flash
 from werkzeug.utils import secure_filename
 import xml.dom.minidom
@@ -14,8 +15,11 @@ def save_xml(uploaded_files, UPLOAD_FOLDER) -> int:
         return '.' in filename and filename.rsplit('.', 1)[1].lower() in "xml"
     
     # Iterate through all given files
+    upload_count = 0
     for file in uploaded_files:
-        if allowed_file(file.filename):
+        if not allowed_file(file.filename):
+            flash("Upload Error: " + file.filename + " could not be uploaded","error")
+        else:
             with xml.dom.minidom.parse(file) as dom:
                 # Check if it's a valid ESL file with every needed information
                 if dom.getElementsByTagName("ValueRow") and dom.getElementsByTagName("TimePeriod"):
@@ -42,7 +46,7 @@ def save_xml(uploaded_files, UPLOAD_FOLDER) -> int:
         
             # If the file is either ESL or SDAT, then save it
             if save_type == 1 or save_type == 2:
-                flash("Uploaded some files", "info")
+                upload_count += 1
                 dir = ""
                 if save_type == 1:
                     dir = "/ESL-files/"
@@ -53,4 +57,5 @@ def save_xml(uploaded_files, UPLOAD_FOLDER) -> int:
                 with open(UPLOAD_FOLDER + dir + secure_filename(file.filename), "wb") as f:
                     f.write(file.getbuffer())
 
+    flash(str(upload_count) + " file(s) uploaded", "info")
     
