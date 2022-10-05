@@ -16,9 +16,10 @@ fetch("/static/data.json")
 			const ts = new Date(entry.ts).getTime();
 			relative["feed"].push([ts, entry.feedR]);
 			relative["usg"].push([ts, entry.usgR]);
-			absolute["feed"].push([ts, Math.max(entry.feedA, 0)]);
-			absolute["usg"].push([ts, Math.max(entry.usgA, 0)]);
+			absolute["feed"].push([ts, entry.feedA]);
+			absolute["usg"].push([ts, entry.usgA]);
 		}
+
 		chartData = { relative, absolute };
 		setView(0);
 	})
@@ -47,7 +48,7 @@ function setView(viewIndex) {
  */
 function updateSeries(...newData) {
 	const names = chart.series.map((s) => s.name);
-	while (!!chart.series.length) {
+	while (chart.series.length) {
 		chart.series[0].remove();
 	}
 	for (const data of newData) {
@@ -185,9 +186,9 @@ const chart = Highcharts.stockChart("container", {
 			nextMonth: {
 				text: "month +",
 				onclick: () => {
-					translateChart((date) =>
-						date.setMonth(date.getMonth() + 1)
-					);
+					translateChart((date) => {
+						date.setMonth(date.getMonth() + 1);
+					});
 				},
 			},
 			nextDay: {
@@ -231,7 +232,7 @@ const chart = Highcharts.stockChart("container", {
 		formatter: function () {
 			return this.points.reduce(function (s, point) {
 				return `${s}<br/>${point.series.name} : ${point.y} kWh`;
-			}, "<b>" + new Date(this.x).toLocaleString() + "</b>");
+			}, `<b>${new Date(this.x).toLocaleString()}</b>`);
 		},
 	},
 });
@@ -264,13 +265,10 @@ const select = Highcharts.createElement(
 	document.querySelector("#container")
 );
 
-["relative Werte", "absolute Werte"].forEach(function (element) {
+["relative Werte", "absolute Werte"].forEach((name) => {
 	Highcharts.createElement(
 		"option",
-		{
-			value: element,
-			innerHTML: element,
-		},
+		{ value: name, innerHTML: name },
 		{},
 		select
 	);

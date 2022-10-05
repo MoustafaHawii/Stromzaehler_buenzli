@@ -5,7 +5,7 @@ from dataHandler import save_xml
 rec = Blueprint("rec", __name__, static_folder="static", template_folder="templates")
 path = os.getcwd()
 
-
+# folder where sdat and esl files are stored
 UPLOAD_FOLDER = os.path.join(path, 'static/files')
 
 # Receive xml file 
