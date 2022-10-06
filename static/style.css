@@ -24,7 +24,7 @@ body {
 }
 
 .toast {
-	width: 250px;
+	width: 300px;
 	margin: 20px;
 	padding: 10px;
 	position: absolute;
@@ -54,6 +54,36 @@ body {
 	margin: 0;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+#reload-btn {
+	position: absolute;
+	z-index: 99;
+	max-height: 24px;
+	top: 11px;
+	left: 140px;
+	font-size: 12px;
+	padding: 4.2px 8px;
+	background-color: #ffffff;
+	border: 1px solid #cccccc;
+	border-radius: 2px;
+	color: #333333;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 80px;
+}
+
+#reload-btn:hover {
+	background-color: #e6e6e6;
+}
+
+#reload-btn.reloading {
+	background-color: #eeeeee;
+}
+
+#reload-btn .fa {
+	font-size: 9px;
 }
 
 @media screen and (max-width: 600px) {

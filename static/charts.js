@@ -260,20 +260,20 @@ const select = Highcharts.createElement(
 	},
 	{
 		position: "absolute",
-		top: "14px",
+		top: "11px",
 		left: "10px",
+		height: "24px",
 	},
 	document.querySelector("#container")
 );
 
-const button = Highcharts.createElement("button", {
-	onclick: function () {
-		fetch("/reload_json_data");
-	},
-	value: "click me",
+document.querySelector("#reload-btn").addEventListener("click", function () {
+	this.innerHTML = "reloading...";
+	this.classList.add("reloading");
+	window.location = "/reload_json_data";
 });
 
-[("relative Werte", "absolute Werte")].forEach((name) => {
+["relative Werte", "absolute Werte"].forEach((name) => {
 	Highcharts.createElement(
 		"option",
 		{ value: name, innerHTML: name },

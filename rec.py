@@ -23,6 +23,6 @@ def upload_files():
         save_xml(uploaded_files, UPLOAD_FOLDER)
         return redirect("/")
     
-    flash("Please send the data via the POST method")
+    flash("Please send the data via the POST method", "info")
     return redirect("/")
 
