@@ -47,12 +47,15 @@ function setView(viewIndex) {
  * @param  {...any} newData new chart data
  */
 function updateSeries(...newData) {
-	const names = chart.series.map((s) => s.name);
+	const options = chart.series.map(({ name, color }) => {
+		return { name, color };
+	});
+	console.log(options);
 	while (chart.series.length) {
 		chart.series[0].remove();
 	}
 	for (const data of newData) {
-		chart.addSeries({ name: names.shift(), data });
+		chart.addSeries({ ...options.shift(), data });
 	}
 }
 
@@ -104,7 +107,10 @@ const chart = Highcharts.stockChart("container", {
 		],
 		selected: 2,
 	},
-	series: [{ name: "Einspeisung" }, { name: "Verbrauch" }],
+	series: [
+		{ name: "Einspeisung", color: "#58508d" },
+		{ name: "Verbrauch", color: "#ff6361" },
+	],
 	exporting: {
 		buttons: {
 			contextButton: {
