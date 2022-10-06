@@ -46,7 +46,6 @@ const toasts = document.querySelector(".toasts").children;
 for (let i = 0; i < toasts.length; i++) {
 	const toast = toasts[i];
 	wait(100 * i).then(() => {
-		console.log(toast);
 		toast.animate(
 			[
 				{ transform: "translateY(-100px)", opacity: 1 },

@@ -16,6 +16,6 @@ def send_json_data():
 @send.route("/reload_json_data")
 def reload_json_data():
     reload_json_file()
-    flash("JSON file reload finished")
+    flash("JSON file reload finished", "info")
     return redirect("/")
     
