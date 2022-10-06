@@ -1,4 +1,4 @@
-from flask import Blueprint, send_file, flash
+from flask import Blueprint, send_file, flash, redirect
 from dataHandler import reload_json_file
 
 send = Blueprint("send", __name__, static_folder="static", template_folder="templates")
@@ -18,3 +18,5 @@ def reload_json_data():
     flash("Starting JSON file reload...")
     reload_json_file()
     flash("JSON file reload finished")
+    return redirect("/")
+    
