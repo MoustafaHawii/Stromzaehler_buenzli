@@ -25,3 +25,4 @@ def upload_files():
     
     flash("Please send the data via the POST method")
     return redirect("/")
+

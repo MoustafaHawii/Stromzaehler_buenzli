@@ -180,6 +180,8 @@ def reload_json_file():
     dict[ts]["usgA"] = usgA
 
     jsdat = dict_to_json(dict, ts)
-    print(json.dumps(jsdat, indent=4))
-
-reload_json_file()
+    json_object = json.dumps(jsdat, indent=4)
+    
+    # Saving JSON dump in a JSON file
+    with open("static/files/data.json", "w") as outfile:
+        outfile.write(json_object)
