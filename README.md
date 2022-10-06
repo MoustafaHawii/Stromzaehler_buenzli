@@ -11,7 +11,7 @@ Additionally the xml files have to be uploaded to `static/files/ESL-files` and `
 
 ### Create a virtual environment for python (venv)
 ```bash
-python3 -m venv venv
+python -m venv venv
 virtualenv venv
 ```
 
@@ -22,5 +22,5 @@ source venv/bin/activate
 
 ### Run flask app
 ```bash
-python3 app.py
+python app.py
 ```
