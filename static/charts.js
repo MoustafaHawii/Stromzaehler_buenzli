@@ -67,6 +67,7 @@ const chart = Highcharts.stockChart("container", {
 	},
 	title: {
 		text: "Stromzähler",
+		y: 18,
 	},
 	rangeSelector: {
 		floating: true,
@@ -259,7 +260,7 @@ const select = Highcharts.createElement(
 	},
 	{
 		position: "absolute",
-		top: "20px",
+		top: "14px",
 		left: "10px",
 	},
 	document.querySelector("#container")
