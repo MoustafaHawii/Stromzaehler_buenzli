@@ -2,7 +2,7 @@ var chartDataRaw;
 var chartData = {};
 
 // fetch data from server
-fetch("/static/data.json")
+fetch("/send_json_data")
 	.then((response) => response.json())
 	.then((data) => {
 		chartDataRaw = data;
@@ -266,7 +266,14 @@ const select = Highcharts.createElement(
 	document.querySelector("#container")
 );
 
-["relative Werte", "absolute Werte"].forEach((name) => {
+const button = Highcharts.createElement("button", {
+	onclick: function () {
+		fetch("/reload_json_data");
+	},
+	value: "click me",
+});
+
+[("relative Werte", "absolute Werte")].forEach((name) => {
 	Highcharts.createElement(
 		"option",
 		{ value: name, innerHTML: name },
