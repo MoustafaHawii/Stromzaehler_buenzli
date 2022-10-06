@@ -194,7 +194,7 @@ const chart = Highcharts.stockChart("container", {
 				text: "month +",
 				onclick: () => {
 					translateChart((date) => {
-						date.setMonth(date.getMonth() + 1);
+						return date.setMonth(date.getMonth() + 1);
 					});
 				},
 			},
