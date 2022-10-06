@@ -1,7 +1,6 @@
 from flask import flash
 from werkzeug.utils import secure_filename
 import xml.dom.minidom
-from io import BytesIO
 
 # Save uploaded xml file in the correct directory
 # params: 
