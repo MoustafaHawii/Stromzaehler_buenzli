@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ESLBillingData>
+<Header version="1.0" created ="2020-07-03T05:36:00" swSystemNameFrom="ESL-EVU" swSystemNameTo="ESL-EVU" />
+<Meter factoryNo="38157930" internalNo="38157930">
+<TimePeriod end="2020-07-01T00:00:00">
+<ValueRow obis="1-1:1.6.1" valueTimeStamp="2020-06-09T06:00:00" value="4.0000" status="V"/>
+<ValueRow obis="1-1:1.6.2" valueTimeStamp="2020-06-09T06:00:00" value="4.0000" status="V"/>
+<ValueRow obis="1-1:1.8.1" value="12460.1000" status="V"/>
+<ValueRow obis="1-1:1.8.2" value="26515.4000" status="V"/>
+<ValueRow obis="1-1:2.6.1" valueTimeStamp="2020-06-21T11:15:00" value="7.4000" status="V"/>
+<ValueRow obis="1-1:2.6.2" valueTimeStamp="2020-06-21T11:15:00" value="7.4000" status="V"/>
+<ValueRow obis="1-1:2.8.1" value="12269.7000" status="V"/>
+<ValueRow obis="1-1:2.8.2" value="6233.0000" status="V"/>
+<ValueRow obis="1-1:5.8.1" value="358.0000" status="V"/>
+<ValueRow obis="1-1:5.8.2" value="635.0000" status="V"/>
+<ValueRow obis="1-1:6.8.1" value="39.0000" status="V"/>
+<ValueRow obis="1-1:6.8.2" value="11.0000" status="V"/>
+<ValueRow obis="1-1:7.8.1" value="1404.0000" status="V"/>
+<ValueRow obis="1-1:7.8.2" value="703.0000" status="V"/>
+<ValueRow obis="1-1:8.8.1" value="2041.0000" status="V"/>
+<ValueRow obis="1-1:8.8.2" value="5439.0000" status="V"/>
+</TimePeriod>
+<TimePeriod end="2020-06-01T00:00:00">
+<ValueRow obis="1-1:1.8.1" value="12283.1000" status="V"/>
+<ValueRow obis="1-1:1.8.2" value="26123.1000" status="V"/>
+</TimePeriod>
+<TimePeriod end="2020-05-01T00:00:00">
+<ValueRow obis="1-1:1.8.1" value="12095.0000" status="V"/>
+<ValueRow obis="1-1:1.8.2" value="25641.4000" status="V"/>
+</TimePeriod>
+</Meter>
+<Meter factoryNo="5442313" internalNo="5442313">
+<TimePeriod end="2020-05-01T00:00:00">
+<ValueRow obis="8-1:1.8.0" value="371.0000" status="V"/>
+</TimePeriod>
+</Meter>
+</ESLBillingData>

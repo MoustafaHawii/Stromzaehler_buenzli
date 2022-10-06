@@ -1,11 +1,7 @@
 # ignore everything in __pycache__
 __pycache__/
-# ignore all .xml files
-*.xml
 # ignore everything in venv
 venv/
-# ignore everything in files
-files/
 # ignore lib64
 lib64
 # ignore .DS_Store
