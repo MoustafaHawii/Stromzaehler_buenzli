@@ -8,7 +8,7 @@ import json
 def get_element_value(element, selector):
     return element.getElementsByTagName(selector)[0].firstChild.nodeValue
 
-# Calculate the needed absolute values
+# Calculate required absolute values
 def get_searched_row_value(row_values):
     sum_feedA = 0
     sum_usgA = 0
@@ -92,7 +92,7 @@ def dict_to_json(data, absolute_ts):
 
     return calculate_abs(list, abs_index)
 
-# calculate absolute values for dict using absolutes
+# calculate absolute values for dict using one absolute
 def calculate_abs(list, abs_index):
     feed = list[abs_index]["feedA"]
     usg = list[abs_index]["usgA"]
