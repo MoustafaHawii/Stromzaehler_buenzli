@@ -1,5 +1,7 @@
 from flask import Blueprint, send_file, flash, redirect
 from dataHandler import reload_json_file
+from threading import Thread
+import time
 
 send = Blueprint("send", __name__, static_folder="static", template_folder="templates")
 
@@ -15,7 +17,8 @@ def send_json_data():
  # Reparses the xml files and updates the json on the server
 @send.route("/reload_json_data")
 def reload_json_data():
-    reload_json_file()
-    flash("JSON file reload finished", "info")
+    Thread(target = reload_json_file).start()
+    time.sleep(25)
+    flash("Refresh the page in 1 minute", "info")
     return redirect("/")
     
