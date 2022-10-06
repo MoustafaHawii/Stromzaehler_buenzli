@@ -32,6 +32,12 @@ body {
 	z-index: 9999;
 	opacity: 0;
 	pointer-events: none;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.toast:hover {
+	white-space: wrap;
 }
 
 .toast.success {
@@ -46,4 +52,12 @@ body {
 
 .toast p {
 	margin: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 600px) {
+	.highcharts-exporting-group .highcharts-button-normal {
+		display: none !important;
+	}
 }

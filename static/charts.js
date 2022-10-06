@@ -2,7 +2,7 @@ var chartDataRaw;
 var chartData = {};
 
 // fetch data from server
-fetch("/send_json_data")
+fetch("/static/data.json")
 	.then((response) => response.json())
 	.then((data) => {
 		chartDataRaw = data;
@@ -19,8 +19,12 @@ fetch("/send_json_data")
 			absolute["feed"].push([ts, entry.feedA]);
 			absolute["usg"].push([ts, entry.usgA]);
 		}
+
 		chartData = { relative, absolute };
 		setView(0);
+	})
+	.catch((error) => {
+		console.log(error);
 	});
 
 /**
@@ -44,7 +48,7 @@ function setView(viewIndex) {
  */
 function updateSeries(...newData) {
 	const names = chart.series.map((s) => s.name);
-	while (!!chart.series.length) {
+	while (chart.series.length) {
 		chart.series[0].remove();
 	}
 	for (const data of newData) {
@@ -55,6 +59,11 @@ function updateSeries(...newData) {
 const chart = Highcharts.stockChart("container", {
 	chart: {
 		zoomType: "x",
+		panKey: "shift",
+		panning: {
+			enabled: true,
+			type: "x",
+		},
 	},
 	title: {
 		text: "Stromzähler",
@@ -177,9 +186,9 @@ const chart = Highcharts.stockChart("container", {
 			nextMonth: {
 				text: "month +",
 				onclick: () => {
-					translateChart((date) =>
-						date.setMonth(date.getMonth() + 1)
-					);
+					translateChart((date) => {
+						date.setMonth(date.getMonth() + 1);
+					});
 				},
 			},
 			nextDay: {
@@ -216,6 +225,16 @@ const chart = Highcharts.stockChart("container", {
 			align: "right",
 		},
 	},
+	legend: {
+		enabled: true,
+	},
+	tooltip: {
+		formatter: function () {
+			return this.points.reduce(function (s, point) {
+				return `${s}<br/>${point.series.name} : ${point.y} kWh`;
+			}, `<b>${new Date(this.x).toLocaleString()}</b>`);
+		},
+	},
 });
 
 /**
@@ -232,19 +251,25 @@ function translateChart(changeFn) {
 }
 
 const select = Highcharts.createElement(
-	'select', {
-		onchange: function() {
-			setView(this.selectedIndex)
-		}
-	}, {
-		position: 'absolute',
-		top: '0px',
-	}, document.querySelector('#container'));
+	"select",
+	{
+		onchange: function () {
+			setView(this.selectedIndex);
+		},
+	},
+	{
+		position: "absolute",
+		top: "20px",
+		left: "10px",
+	},
+	document.querySelector("#container")
+);
 
-['relative Werte', 'absolute Werte'].forEach(function(element) {
+["relative Werte", "absolute Werte"].forEach((name) => {
 	Highcharts.createElement(
-		'option', {
-			value: element,
-			innerHTML: element
-		}, {}, select);
+		"option",
+		{ value: name, innerHTML: name },
+		{},
+		select
+	);
 });
