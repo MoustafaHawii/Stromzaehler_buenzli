@@ -11,7 +11,6 @@ UPLOAD_FOLDER = os.path.join(path, 'static/files')
 # Receive xml file 
 @rec.route("/rec_xml_file", methods = ['POST', 'GET'])
 def upload_files():
-    print("HI")
     if request.method == 'POST':
         # Check if there are any files that were sent
         if 'file-input' not in request.files:
