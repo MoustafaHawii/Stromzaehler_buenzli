@@ -2,6 +2,7 @@ from flask import Flask, render_template
 from rec import rec
 from send import send
 import uuid
+from waitress import serve
 
 app = Flask(__name__)
 SECRET_KEY = uuid.uuid4().hex
@@ -17,4 +18,4 @@ def home():
     return render_template("index.html")
 
 if __name__ == "__main__":
-    app.run()
+    serve(app)
