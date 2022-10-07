@@ -22,29 +22,30 @@ def save_xml(uploaded_files, UPLOAD_FOLDER) -> int:
         if not allowed_file(file.filename):
             flash("Upload Error: " + file.filename + " could not be uploaded","error")
         else:
-            with xml.dom.minidom.parse(file) as dom:
-                # Check if it's a valid ESL file with every needed information
-                if dom.getElementsByTagName("ValueRow") and dom.getElementsByTagName("TimePeriod"):
-                    row_value = dom.getElementsByTagName("ValueRow")
-                    has_1_8_1 = False
-                    has_1_8_2 = False
-                    has_2_8_1 = False
-                    has_2_8_2 = False
-                    for r in row_value:
-                        if r.getAttribute("obis") == "1-1:1.8.1":
-                            has_1_8_1 = True
-                        if r.getAttribute("obis") == "1-1:1.8.2":
-                            has_1_8_2 = True
-                        if r.getAttribute("obis") == "1-1:2.8.1":
-                            has_2_8_1 = True
-                        if r.getAttribute("obis") == "1-1:2.8.2":
-                            has_2_8_2 = True
-                    if has_1_8_1 and has_1_8_2 and has_2_8_1 and has_2_8_2:
-                        save_type = 1
-                
-                # Check if it's a valid SDAT file with every needed information
-                if dom.getElementsByTagName("rsm:DocumentID") and dom.getElementsByTagName("rsm:Position"):
-                    save_type = 2
+            if file.getbuffer().nbytes != 0:
+                with xml.dom.minidom.parse(file) as dom:
+                    # Check if it's a valid ESL file with every needed information
+                    if dom.getElementsByTagName("ValueRow") and dom.getElementsByTagName("TimePeriod"):
+                        row_value = dom.getElementsByTagName("ValueRow")
+                        has_1_8_1 = False
+                        has_1_8_2 = False
+                        has_2_8_1 = False
+                        has_2_8_2 = False
+                        for r in row_value:
+                            if r.getAttribute("obis") == "1-1:1.8.1":
+                                has_1_8_1 = True
+                            if r.getAttribute("obis") == "1-1:1.8.2":
+                                has_1_8_2 = True
+                            if r.getAttribute("obis") == "1-1:2.8.1":
+                                has_2_8_1 = True
+                            if r.getAttribute("obis") == "1-1:2.8.2":
+                                has_2_8_2 = True
+                        if has_1_8_1 and has_1_8_2 and has_2_8_1 and has_2_8_2:
+                            save_type = 1
+                    
+                    # Check if it's a valid SDAT file with every needed information
+                    if dom.getElementsByTagName("rsm:DocumentID") and dom.getElementsByTagName("rsm:Position"):
+                        save_type = 2
         
             # If the file is either ESL or SDAT, then save it
             if save_type == 1 or save_type == 2:
