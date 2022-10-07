@@ -52,9 +52,9 @@ def save_xml(uploaded_files, UPLOAD_FOLDER) -> int:
                 upload_count += 1
                 dir = ""
                 if save_type == 1:
-                    dir = "/ESL-files/"
+                    dir = "/ESL-Files/"
                 else:
-                    dir = "/SDAT-files/"
+                    dir = "/SDAT-Files/"
                 
                 # Save file in the correct directory
                 with open(UPLOAD_FOLDER + dir + secure_filename(file.filename), "wb") as f:
